@@ -8,7 +8,7 @@ fewest operations possible.
 
 ## Status
 
-🚧 Work in progress. See the [Project board / Issues] for current tasks.
+ Work in progress. 
 
 | Part | Status |
 |---|---|
@@ -43,18 +43,4 @@ make
 Optional flags: `--simple` `--medium` `--complex` `--adaptive` (default)
 and `--bench` (prints metrics to stderr).
 
-## Team
 
-| Login | Role in this project |
-|---|---|
-| <login1> | |
-| <login2> | |
-
-## Resources
-
-- Subject PDF (kept in `docs/` or linked here).
-- *(to be filled as we go: articles, references, and a note on how AI was used — see subject Chapter III)*
-
-## License
-
-Educational project — 42 curriculum.
