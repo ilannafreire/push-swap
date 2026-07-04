@@ -1,11 +1,5 @@
 #include "push_swap.h"
 
-/*
-** cfg holds the three numbers every chunk helper needs:
-** cfg[0] = min value in a, cfg[1] = chunk width, cfg[2] = nb of chunks.
-** Bundling them keeps every function at 2-3 parameters (norm limit 4).
-*/
-
 void	stack_min_max(t_stack *a, int *min_val, int *max_val)
 {
 	*min_val = a->value;

@@ -1,13 +1,5 @@
 #include "push_swap.h"
 
-/*
-** One sweep of the whole current a per chunk: whatever belongs to
-** chunk_id is pushed to b (pb), everything else is rotated (ra) to
-** be looked at again later. Processed from the lowest chunk up to
-** the highest, so chunk (nb-1) (largest values) ends up on top of b
-** -- reassemble() below then pulls chunks back in the opposite
-** order, so the smallest chunk ends up on top of a at the very end.
-*/
 static void	distribute(t_data *data, int *cfg)
 {
 	int	chunk_id;
@@ -31,12 +23,6 @@ static void	distribute(t_data *data, int *cfg)
 	}
 }
 
-/*
-** a currently holds this chunk's "size" raw values on top (already
-** finished, smaller chunks sit below, untouched). Extract them one
-** at a time in ascending order onto b, then pa them all back so they
-** land, correctly sorted, above the previously finished chunks.
-*/
 static void	local_sort_chunk(t_data *data, int low, int high, int size)
 {
 	t_stack	*cur;
@@ -74,12 +60,6 @@ static void	local_sort_chunk(t_data *data, int low, int high, int size)
 	}
 }
 
-/*
-** Pull chunks back from b in HIGHEST-to-LOWEST order: the highest
-** chunk is pulled first (a is empty, so it becomes the bottom of the
-** rebuilt stack), then each next-lower chunk is pulled on top of it.
-** Chunk 0 (smallest) is pulled last, so it ends up on top of a.
-*/
 static void	reassemble(t_data *data, int *sizes, int *cfg)
 {
 	int	chunk_id;
@@ -101,15 +81,6 @@ static void	reassemble(t_data *data, int *sizes, int *cfg)
 	}
 }
 
-/*
-** Splits the value range into ceil(sqrt(n)) chunks, distributes the
-** stack into those chunks (one O(current size) sweep per chunk), then
-** rebuilds a chunk by chunk (highest first, so the smallest chunk
-** ends up on top last), fixing each chunk's internal order right
-** after it is pulled back from b.
-** Distribution: sqrt(n) sweeps x O(n) each -> O(n*sqrt(n)).
-** Local fix: sqrt(n) chunks x O(sqrt(n)^2) each -> O(n*sqrt(n)).
-*/
 void	sort_chunks(t_data *data)
 {
 	int	min_val;

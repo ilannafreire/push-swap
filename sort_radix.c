@@ -1,11 +1,5 @@
 #include "push_swap.h"
 
-/*
-** Rank of value = how many elements (across a and b combined, which
-** always adds up to every original element, however split) are
-** smaller than it. Values are unique, so rank is a bijection to
-** 0..n-1 and preserves order: sorting by rank == sorting by value.
-*/
 static int	get_rank(t_data *data, int value)
 {
 	t_stack	*cur;
@@ -44,13 +38,6 @@ static int	bits_needed(int n)
 	return (bits);
 }
 
-/*
-** Stable binary partition on one bit: elements with this bit at 0 go
-** to b (pb), elements with it at 1 stay in a (ra defers them to the
-** back, preserving their relative order). Restoring the 0-bucket on
-** top of a (pa) keeps both buckets internally ordered as before this
-** pass -- the classic LSD radix invariant.
-*/
 static void	radix_pass(t_data *data, int bit)
 {
 	int	count;
@@ -79,10 +66,6 @@ static void	radix_pass(t_data *data, int bit)
 	}
 }
 
-/*
-** Radix sort on rank bits (0 = smallest .. n-1 = largest), LSB first.
-** ceil(log2(n)) passes, each O(n) operations -> O(n log n).
-*/
 void	sort_radix(t_data *data)
 {
 	int	bits;

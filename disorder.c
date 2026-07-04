@@ -1,10 +1,5 @@
 #include "push_swap.h"
 
-/*
-** disorder = mistakes / total_pairs, measured on stack a before any
-** operation is executed. A mistake is a pair (i, j) with i before j
-** in the stack where value[i] > value[j]. See subject VI.3.2.
-*/
 double	compute_disorder(t_stack *a)
 {
 	t_stack	*i;

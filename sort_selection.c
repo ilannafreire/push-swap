@@ -40,14 +40,6 @@ static void	rotate_to_top(t_data *data, int index)
 	}
 }
 
-/*
-** Classic selection sort: repeatedly extract the smallest remaining
-** value from a and push it onto b. Because we always extract the
-** current minimum, b ends up sorted in descending order (top to
-** bottom); pushing everything back with pa then restores ascending
-** order in a (two reversals cancel out).
-** Cost: n extractions x up to n/2 rotations each -> O(n^2).
-*/
 void	sort_selection(t_data *data)
 {
 	data->used_strategy = STRAT_SIMPLE;

@@ -1,11 +1,5 @@
 #include "push_swap.h"
 
-/*
-** These four functions work on either stack (a or b) through a
-** t_stack ** pointer, so ops_a.c / ops_b.c / ops_double.c can reuse
-** the same logic instead of duplicating the O(n) traversal twice.
-*/
-
 void	generic_swap(t_stack **stack)
 {
 	t_stack	*first;
