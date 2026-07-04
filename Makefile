@@ -12,6 +12,7 @@ SRCS = main.c \
        ops_double.c \
        disorder.c \
        sort_selection.c \
+       sort_chunks_utils.c \
        sort_chunks.c \
        sort_radix.c \
        sort_adaptive.c \

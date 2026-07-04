@@ -92,6 +92,12 @@ double	compute_disorder(t_stack *a);
 /* sort_selection.c (O(n^2)) */
 void	sort_selection(t_data *data);
 
+/* sort_chunks_utils.c (cfg = {min_val, width, nb_chunks}) */
+void	stack_min_max(t_stack *a, int *min_val, int *max_val);
+int		sqrt_ceil(int n);
+int		chunk_index(int value, int *cfg);
+void	count_sizes(t_stack *a, int *sizes, int *cfg);
+
 /* sort_chunks.c (O(n*sqrt(n))) */
 void	sort_chunks(t_data *data);
 
