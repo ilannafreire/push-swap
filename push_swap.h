@@ -7,8 +7,6 @@
 # include <stdlib.h>
 # include <limits.h>
 
-typed ef struct s_placeholder_unused t_placeholder_unused;
-
 typedef struct s_stack
 {
 	int				value;
