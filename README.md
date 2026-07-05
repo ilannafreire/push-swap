@@ -42,5 +42,3 @@ make
 
 Optional flags: `--simple` `--medium` `--complex` `--adaptive` (default)
 and `--bench` (prints metrics to stderr).
-
-
