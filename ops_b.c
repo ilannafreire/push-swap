@@ -3,39 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ops_b.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/05 02:02:38 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/05 02:02:44 by ifreire          ###   ########.fr       */
+/*   Created: 2026/07/05 14:00:00 by ifreire                     #+#    #+#   */
+/*   Updated: 2026/07/05 14:00:00 by ifreire              ###   ########.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	op_sb(t_ctx *data)
+void	op_sb(t_data *data)
 {
-	swap_top(&data->b);
-	data->stats.sb++;
-	write_str(1, "sb\n");
+	generic_swap(&data->b);
+	data->bench.sb++;
+	put_str(1, "sb\n");
 }
 
-void	op_pb(t_ctx *data)
+void	op_pb(t_data *data)
 {
-	transfer_top(&data->b, &data->a);
-	data->stats.pb++;
-	write_str(1, "pb\n");
+	generic_push(&data->b, &data->a);
+	data->bench.pb++;
+	put_str(1, "pb\n");
 }
 
-void	op_rb(t_ctx *data)
+void	op_rb(t_data *data)
 {
-	shift_fwd(&data->b);
-	data->stats.rb++;
-	write_str(1, "rb\n");
+	generic_rotate(&data->b);
+	data->bench.rb++;
+	put_str(1, "rb\n");
 }
 
-void	op_rrb(t_ctx *data)
+void	op_rrb(t_data *data)
 {
-	shift_back(&data->b);
-	data->stats.rrb++;
-	write_str(1, "rrb\n");
+	generic_reverse_rotate(&data->b);
+	data->bench.rrb++;
+	put_str(1, "rrb\n");
 }

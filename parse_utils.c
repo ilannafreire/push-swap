@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ops_double.c                                       :+:      :+:    :+:   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,26 +12,35 @@
 
 #include "push_swap.h"
 
-void	op_ss(t_data *data)
+int	my_isdigit(char c)
 {
-	generic_swap(&data->a);
-	generic_swap(&data->b);
-	data->bench.ss++;
-	put_str(1, "ss\n");
+	return (c >= '0' && c <= '9');
 }
 
-void	op_rr(t_data *data)
+int	my_atoi_strict(const char *s, int *out)
 {
-	generic_rotate(&data->a);
-	generic_rotate(&data->b);
-	data->bench.rr++;
-	put_str(1, "rr\n");
-}
+	int		sign;
+	long	res;
 
-void	op_rrr(t_data *data)
-{
-	generic_reverse_rotate(&data->a);
-	generic_reverse_rotate(&data->b);
-	data->bench.rrr++;
-	put_str(1, "rrr\n");
+	sign = 1;
+	if (*s == '+' || *s == '-')
+	{
+		if (*s == '-')
+			sign = -1;
+		s++;
+	}
+	if (!*s)
+		return (0);
+	res = 0;
+	while (*s)
+	{
+		if (!my_isdigit(*s))
+			return (0);
+		res = res * 10 + (*s - '0');
+		if (res * sign > INT_MAX || res * sign < INT_MIN)
+			return (0);
+		s++;
+	}
+	*out = (int)(res * sign);
+	return (1);
 }

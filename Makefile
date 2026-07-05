@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/07/05 02:02:12 by ifreire           #+#    #+#              #
-#    Updated: 2026/07/05 03:21:19 by ifreire          ###   ########.fr        #
+#    Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#              #
+#    Updated: 2026/07/05 14:00:00 by ifreire          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,19 +17,20 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = main.c \
        parse.c \
-       node.c \
-       list_ops.c \
+       stack.c \
+       stack_utils.c \
        ops_a.c \
        ops_b.c \
        ops_double.c \
-       metrics.c \
-       sort_small.c \
-       group_utils.c \
-       sort_groups.c \
-       sort_bits.c \
-       sort_auto.c \
-       stats.c \
-       io_helpers.c
+       disorder.c \
+       sort_selection.c \
+       sort_chunks_utils.c \
+       sort_chunks.c \
+       sort_radix.c \
+       sort_adaptive.c \
+       bench.c \
+       parse_utils.c \
+       io_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

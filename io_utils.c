@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ops_double.c                                       :+:      :+:    :+:   */
+/*   io_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,26 +12,34 @@
 
 #include "push_swap.h"
 
-void	op_ss(t_data *data)
+size_t	my_strlen(const char *s)
 {
-	generic_swap(&data->a);
-	generic_swap(&data->b);
-	data->bench.ss++;
-	put_str(1, "ss\n");
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
-void	op_rr(t_data *data)
+void	put_str(int fd, const char *s)
 {
-	generic_rotate(&data->a);
-	generic_rotate(&data->b);
-	data->bench.rr++;
-	put_str(1, "rr\n");
+	write(fd, s, my_strlen(s));
 }
 
-void	op_rrr(t_data *data)
+void	put_nbr(int fd, int n)
 {
-	generic_reverse_rotate(&data->a);
-	generic_reverse_rotate(&data->b);
-	data->bench.rrr++;
-	put_str(1, "rrr\n");
+	long	nb;
+	char	c;
+
+	nb = n;
+	if (nb < 0)
+	{
+		put_str(fd, "-");
+		nb = -nb;
+	}
+	if (nb >= 10)
+		put_nbr(fd, (int)(nb / 10));
+	c = (char)(nb % 10) + '0';
+	write(fd, &c, 1);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ops_double.c                                       :+:      :+:    :+:   */
+/*   sort_selection.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,26 +12,54 @@
 
 #include "push_swap.h"
 
-void	op_ss(t_data *data)
+static int	find_min_index(t_stack *a)
 {
-	generic_swap(&data->a);
-	generic_swap(&data->b);
-	data->bench.ss++;
-	put_str(1, "ss\n");
+	int	index;
+	int	best_index;
+	int	best_value;
+
+	index = 0;
+	best_index = 0;
+	best_value = a->value;
+	while (a)
+	{
+		if (a->value < best_value)
+		{
+			best_value = a->value;
+			best_index = index;
+		}
+		a = a->next;
+		index++;
+	}
+	return (best_index);
 }
 
-void	op_rr(t_data *data)
+static void	rotate_to_top(t_data *data, int index)
 {
-	generic_rotate(&data->a);
-	generic_rotate(&data->b);
-	data->bench.rr++;
-	put_str(1, "rr\n");
+	int	size;
+
+	size = stack_size(data->a);
+	if (index <= size - index)
+	{
+		while (index-- > 0)
+			op_ra(data);
+	}
+	else
+	{
+		index = size - index;
+		while (index-- > 0)
+			op_rra(data);
+	}
 }
 
-void	op_rrr(t_data *data)
+void	sort_selection(t_data *data)
 {
-	generic_reverse_rotate(&data->a);
-	generic_reverse_rotate(&data->b);
-	data->bench.rrr++;
-	put_str(1, "rrr\n");
+	data->used_strategy = STRAT_SIMPLE;
+	while (data->a)
+	{
+		rotate_to_top(data, find_min_index(data->a));
+		op_pb(data);
+	}
+	while (data->b)
+		op_pa(data);
 }

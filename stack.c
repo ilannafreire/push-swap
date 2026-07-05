@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ops_double.c                                       :+:      :+:    :+:   */
+/*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,26 +12,54 @@
 
 #include "push_swap.h"
 
-void	op_ss(t_data *data)
+t_stack	*stack_new(int value)
 {
-	generic_swap(&data->a);
-	generic_swap(&data->b);
-	data->bench.ss++;
-	put_str(1, "ss\n");
+	t_stack	*node;
+
+	node = malloc(sizeof(t_stack));
+	if (!node)
+	{
+		put_str(2, "Error\n");
+		exit(1);
+	}
+	node->value = value;
+	node->rank = 0;
+	node->next = NULL;
+	return (node);
 }
 
-void	op_rr(t_data *data)
+void	stack_free(t_stack **stack)
 {
-	generic_rotate(&data->a);
-	generic_rotate(&data->b);
-	data->bench.rr++;
-	put_str(1, "rr\n");
+	t_stack	*tmp;
+
+	while (*stack)
+	{
+		tmp = (*stack)->next;
+		free(*stack);
+		*stack = tmp;
+	}
 }
 
-void	op_rrr(t_data *data)
+int	stack_size(t_stack *stack)
 {
-	generic_reverse_rotate(&data->a);
-	generic_reverse_rotate(&data->b);
-	data->bench.rrr++;
-	put_str(1, "rrr\n");
+	int	count;
+
+	count = 0;
+	while (stack)
+	{
+		count++;
+		stack = stack->next;
+	}
+	return (count);
+}
+
+int	stack_is_sorted(t_stack *stack)
+{
+	while (stack && stack->next)
+	{
+		if (stack->value > stack->next->value)
+			return (0);
+		stack = stack->next;
+	}
+	return (1);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ops_double.c                                       :+:      :+:    :+:   */
+/*   sort_chunks_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,26 +12,45 @@
 
 #include "push_swap.h"
 
-void	op_ss(t_data *data)
+void	stack_min_max(t_stack *a, int *min_val, int *max_val)
 {
-	generic_swap(&data->a);
-	generic_swap(&data->b);
-	data->bench.ss++;
-	put_str(1, "ss\n");
+	*min_val = a->value;
+	*max_val = a->value;
+	while (a)
+	{
+		if (a->value < *min_val)
+			*min_val = a->value;
+		if (a->value > *max_val)
+			*max_val = a->value;
+		a = a->next;
+	}
 }
 
-void	op_rr(t_data *data)
+int	sqrt_ceil(int n)
 {
-	generic_rotate(&data->a);
-	generic_rotate(&data->b);
-	data->bench.rr++;
-	put_str(1, "rr\n");
+	int	r;
+
+	r = 0;
+	while (r * r < n)
+		r++;
+	return (r);
 }
 
-void	op_rrr(t_data *data)
+int	chunk_index(int value, t_chunk_cfg *cfg)
 {
-	generic_reverse_rotate(&data->a);
-	generic_reverse_rotate(&data->b);
-	data->bench.rrr++;
-	put_str(1, "rrr\n");
+	int	idx;
+
+	idx = (value - cfg->min_val) / cfg->width;
+	if (idx >= cfg->nb)
+		idx = cfg->nb - 1;
+	return (idx);
+}
+
+void	count_sizes(t_stack *a, int *sizes, t_chunk_cfg *cfg)
+{
+	while (a)
+	{
+		sizes[chunk_index(a->value, cfg)]++;
+		a = a->next;
+	}
 }
