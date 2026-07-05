@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   io_helpers.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/05 02:05:17 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/05 02:32:54 by ifreire          ###   ########.fr       */
+/*   Created: 2026/07/05 04:26:58 by ifreire           #+#    #+#             */
+/*   Updated: 2026/07/05 04:27:22 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	my_isdigit(char c)
+int	is_digit(char c)
 {
 	return (c >= '0' && c <= '9');
 }
 
-size_t	my_strlen(const char *s)
+size_t	str_len(const char *s)
 {
 	size_t	i;
 
@@ -27,12 +27,12 @@ size_t	my_strlen(const char *s)
 	return (i);
 }
 
-void	put_str(int fd, const char *s)
+void	write_str(int fd, const char *s)
 {
-	write(fd, s, my_strlen(s));
+	write(fd, s, str_len(s));
 }
 
-void	put_nbr(int fd, int n)
+void	write_int(int fd, int n)
 {
 	long	nb;
 	char	c;
@@ -40,16 +40,16 @@ void	put_nbr(int fd, int n)
 	nb = n;
 	if (nb < 0)
 	{
-		put_str(fd, "-");
+		write_str(fd, "-");
 		nb = -nb;
 	}
 	if (nb >= 10)
-		put_nbr(fd, (int)(nb / 10));
+		write_int(fd, (int)(nb / 10));
 	c = (char)(nb % 10) + '0';
 	write(fd, &c, 1);
 }
 
-int	my_atoi_strict(const char *s, int *out)
+int	parse_int(const char *s, int *out)
 {
 	int		sign;
 	long	res;
@@ -66,7 +66,7 @@ int	my_atoi_strict(const char *s, int *out)
 	res = 0;
 	while (*s)
 	{
-		if (!my_isdigit(*s))
+		if (!is_digit(*s))
 			return (0);
 		res = res * 10 + (*s - '0');
 		if (res * sign > INT_MAX || res * sign < INT_MIN)

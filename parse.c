@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-static int	str_eq(const char *a, const char *b)
+static int	same_str(const char *a, const char *b)
 {
 	int	i;
 
@@ -22,27 +22,27 @@ static int	str_eq(const char *a, const char *b)
 	return (a[i] == '\0' && b[i] == '\0');
 }
 
-static int	is_flag(const char *arg, t_data *data)
+static int	is_opt(const char *arg, t_ctx *data)
 {
-	if (str_eq(arg, "--simple"))
-		data->strategy = STRAT_SIMPLE;
-	else if (str_eq(arg, "--medium"))
-		data->strategy = STRAT_MEDIUM;
-	else if (str_eq(arg, "--complex"))
-		data->strategy = STRAT_COMPLEX;
-	else if (str_eq(arg, "--adaptive"))
-		data->strategy = STRAT_ADAPTIVE;
-	else if (str_eq(arg, "--bench"))
-		data->bench_mode = 1;
+	if (same_str(arg, "--simple"))
+		data->algo = ALGO_TINY;
+	else if (same_str(arg, "--medium"))
+		data->algo = ALGO_GROUPED;
+	else if (same_str(arg, "--complex"))
+		data->algo = ALGO_BITWISE;
+	else if (same_str(arg, "--adaptive"))
+		data->algo = ALGO_AUTO;
+	else if (same_str(arg, "--stats"))
+		data->stats_mode = 1;
 	else
 		return (0);
 	return (1);
 }
 
-static int	add_number(t_data *data, int value)
+static int	append_val(t_ctx *data, int value)
 {
-	t_stack	*node;
-	t_stack	*cur;
+	t_node	*node;
+	t_node	*cur;
 
 	cur = data->a;
 	while (cur)
@@ -51,7 +51,7 @@ static int	add_number(t_data *data, int value)
 			return (0);
 		cur = cur->next;
 	}
-	node = stack_new(value);
+	node = node_new(value);
 	if (!data->a)
 		data->a = node;
 	else
@@ -64,7 +64,7 @@ static int	add_number(t_data *data, int value)
 	return (1);
 }
 
-static int	build_stack(t_data *data, int argc, char **argv, int start)
+static int	init_list(t_ctx *data, int argc, char **argv, int start)
 {
 	int	i;
 	int	value;
@@ -72,11 +72,11 @@ static int	build_stack(t_data *data, int argc, char **argv, int start)
 	i = start;
 	while (i < argc)
 	{
-		if (!is_flag(argv[i], data))
+		if (!is_opt(argv[i], data))
 		{
-			if (!my_atoi_strict(argv[i], &value))
+			if (!parse_int(argv[i], &value))
 				return (0);
-			if (!add_number(data, value))
+			if (!append_val(data, value))
 				return (0);
 		}
 		i++;
@@ -84,26 +84,26 @@ static int	build_stack(t_data *data, int argc, char **argv, int start)
 	return (1);
 }
 
-int	parse_args(int argc, char **argv, t_data *data)
+int	parse_args(int argc, char **argv, t_ctx *data)
 {
 	data->a = NULL;
 	data->b = NULL;
-	data->strategy = STRAT_ADAPTIVE;
-	data->used_strategy = STRAT_SIMPLE;
-	data->bench_mode = 0;
-	data->disorder = 0.0;
-	data->bench.sa = 0;
-	data->bench.sb = 0;
-	data->bench.ss = 0;
-	data->bench.pa = 0;
-	data->bench.pb = 0;
-	data->bench.ra = 0;
-	data->bench.rb = 0;
-	data->bench.rr = 0;
-	data->bench.rra = 0;
-	data->bench.rrb = 0;
-	data->bench.rrr = 0;
-	if (!build_stack(data, argc, argv, 1))
+	data->algo = ALGO_AUTO;
+	data->used_algo = ALGO_TINY;
+	data->stats_mode = 0;
+	data->entropy = 0.0;
+	data->stats.sa = 0;
+	data->stats.sb = 0;
+	data->stats.ss = 0;
+	data->stats.pa = 0;
+	data->stats.pb = 0;
+	data->stats.ra = 0;
+	data->stats.rb = 0;
+	data->stats.rr = 0;
+	data->stats.rra = 0;
+	data->stats.rrb = 0;
+	data->stats.rrr = 0;
+	if (!init_list(data, argc, argv, 1))
 		return (0);
 	return (1);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_selection.c                                   :+:      :+:    :+:   */
+/*   sort_small.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-static int	find_min_index(t_stack *a)
+static int	idx_of_min(t_node *a)
 {
 	int	index;
 	int	best_index;
@@ -34,11 +34,11 @@ static int	find_min_index(t_stack *a)
 	return (best_index);
 }
 
-static void	rotate_to_top(t_data *data, int index)
+static void	bring_to_front(t_ctx *data, int index)
 {
 	int	size;
 
-	size = stack_size(data->a);
+	size = list_size(data->a);
 	if (index <= size - index)
 	{
 		while (index-- > 0)
@@ -52,12 +52,12 @@ static void	rotate_to_top(t_data *data, int index)
 	}
 }
 
-void	sort_selection(t_data *data)
+void	sort_small(t_ctx *data)
 {
-	data->used_strategy = STRAT_SIMPLE;
+	data->used_algo = ALGO_TINY;
 	while (data->a)
 	{
-		rotate_to_top(data, find_min_index(data->a));
+		bring_to_front(data, idx_of_min(data->a));
 		op_pb(data);
 	}
 	while (data->b)

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_chunks_utils.c                                :+:      :+:    :+:   */
+/*   group_io_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-void	stack_min_max(t_stack *a, int *min_val, int *max_val)
+void	find_bounds(t_node *a, int *min_val, int *max_val)
 {
 	*min_val = a->value;
 	*max_val = a->value;
@@ -26,7 +26,7 @@ void	stack_min_max(t_stack *a, int *min_val, int *max_val)
 	}
 }
 
-int	sqrt_ceil(int n)
+int	int_sqrt(int n)
 {
 	int	r;
 
@@ -36,7 +36,7 @@ int	sqrt_ceil(int n)
 	return (r);
 }
 
-int	chunk_index(int value, int *cfg)
+int	group_of(int value, int *cfg)
 {
 	int	idx;
 
@@ -46,11 +46,11 @@ int	chunk_index(int value, int *cfg)
 	return (idx);
 }
 
-void	count_sizes(t_stack *a, int *sizes, int *cfg)
+void	tally_groups(t_node *a, int *sizes, int *cfg)
 {
 	while (a)
 	{
-		sizes[chunk_index(a->value, cfg)]++;
+		sizes[group_of(a->value, cfg)]++;
 		a = a->next;
 	}
 }

@@ -12,30 +12,30 @@
 
 #include "push_swap.h"
 
-void	op_sb(t_data *data)
+void	op_sb(t_ctx *data)
 {
-	generic_swap(&data->b);
-	data->bench.sb++;
-	put_str(1, "sb\n");
+	swap_top(&data->b);
+	data->stats.sb++;
+	write_str(1, "sb\n");
 }
 
-void	op_pb(t_data *data)
+void	op_pb(t_ctx *data)
 {
-	generic_push(&data->b, &data->a);
-	data->bench.pb++;
-	put_str(1, "pb\n");
+	transfer_top(&data->b, &data->a);
+	data->stats.pb++;
+	write_str(1, "pb\n");
 }
 
-void	op_rb(t_data *data)
+void	op_rb(t_ctx *data)
 {
-	generic_rotate(&data->b);
-	data->bench.rb++;
-	put_str(1, "rb\n");
+	shift_fwd(&data->b);
+	data->stats.rb++;
+	write_str(1, "rb\n");
 }
 
-void	op_rrb(t_data *data)
+void	op_rrb(t_ctx *data)
 {
-	generic_reverse_rotate(&data->b);
-	data->bench.rrb++;
-	put_str(1, "rrb\n");
+	shift_back(&data->b);
+	data->stats.rrb++;
+	write_str(1, "rrb\n");
 }

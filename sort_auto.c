@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_adaptive.c                                    :+:      :+:    :+:   */
+/*   sort_auto.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,12 +12,12 @@
 
 #include "push_swap.h"
 
-void	sort_adaptive(t_data *data)
+void	sort_auto(t_ctx *data)
 {
-	if (data->disorder < 0.2)
-		sort_selection(data);
-	else if (data->disorder < 0.5)
-		sort_chunks(data);
+	if (data->entropy < 0.2)
+		sort_small(data);
+	else if (data->entropy < 0.5)
+		sort_groups(data);
 	else
-		sort_radix(data);
+		sort_bitwise(data);
 }

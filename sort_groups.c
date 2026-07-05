@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_chunks.c                                      :+:      :+:    :+:   */
+/*   sort_groups.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-static void	distribute(t_data *data, int *cfg)
+static void	scatter_chunks(t_ctx *data, int *cfg)
 {
 	int	chunk_id;
 	int	remaining;
@@ -21,11 +21,11 @@ static void	distribute(t_data *data, int *cfg)
 	chunk_id = 0;
 	while (chunk_id < cfg[2])
 	{
-		remaining = stack_size(data->a);
+		remaining = list_size(data->a);
 		i = 0;
 		while (i < remaining)
 		{
-			if (chunk_index(data->a->value, cfg) == chunk_id)
+			if (group_of(data->a->value, cfg) == chunk_id)
 				op_pb(data);
 			else
 				op_ra(data);
@@ -35,9 +35,9 @@ static void	distribute(t_data *data, int *cfg)
 	}
 }
 
-static int	find_in_range(t_stack *a, int low, int high)
+static int	best_in_window(t_node *a, int low, int high)
 {
-	t_stack	*cur;
+	t_node	*cur;
 	int		best_pos;
 	int		best_val;
 	int		pos;
@@ -62,15 +62,15 @@ static int	find_in_range(t_stack *a, int low, int high)
 	return (best_pos);
 }
 
-static void	local_sort_chunk(t_data *data, int low, int high, int size)
+static void	collect_chunk(t_ctx *data, int low, int high, int size)
 {
 	int	best_pos;
 	int	sz;
 
 	while (size-- > 0)
 	{
-		best_pos = find_in_range(data->a, low, high);
-		sz = stack_size(data->a);
+		best_pos = best_in_window(data->a, low, high);
+		sz = list_size(data->a);
 		if (best_pos <= sz - best_pos)
 			while (best_pos-- > 0)
 				op_ra(data);
@@ -84,7 +84,7 @@ static void	local_sort_chunk(t_data *data, int low, int high, int size)
 	}
 }
 
-static void	reassemble(t_data *data, int *sizes, int *cfg)
+static void	reassemble(t_ctx *data, int *sizes, int *cfg)
 {
 	int	chunk_id;
 	int	low;
@@ -97,7 +97,7 @@ static void	reassemble(t_data *data, int *sizes, int *cfg)
 		while (i-- > 0)
 			op_pa(data);
 		low = cfg[0] + chunk_id * cfg[1];
-		local_sort_chunk(data, low, low + cfg[1] - 1, sizes[chunk_id]);
+		collect_chunk(data, low, low + cfg[1] - 1, sizes[chunk_id]);
 		i = sizes[chunk_id];
 		while (i-- > 0)
 			op_pa(data);
@@ -105,28 +105,28 @@ static void	reassemble(t_data *data, int *sizes, int *cfg)
 	}
 }
 
-void	sort_chunks(t_data *data)
+void	sort_groups(t_ctx *data)
 {
 	int	min_val;
 	int	max_val;
 	int	cfg[3];
 	int	*sizes;
 
-	data->used_strategy = STRAT_MEDIUM;
+	data->used_algo = ALGO_GROUPED;
 	if (!data->a || !data->a->next)
 		return ;
-	stack_min_max(data->a, &min_val, &max_val);
-	cfg[2] = sqrt_ceil(stack_size(data->a));
+	find_bounds(data->a, &min_val, &max_val);
+	cfg[2] = int_sqrt(list_size(data->a));
 	cfg[0] = min_val;
 	cfg[1] = (max_val - min_val) / cfg[2] + 1;
 	sizes = (int *)calloc(cfg[2], sizeof(int));
 	if (!sizes)
 	{
-		put_str(2, "Error\n");
+		write_str(2, "Error\n");
 		return ;
 	}
-	count_sizes(data->a, sizes, cfg);
-	distribute(data, cfg);
+	tally_groups(data->a, sizes, cfg);
+	scatter_chunks(data, cfg);
 	reassemble(data, sizes, cfg);
 	free(sizes);
 }

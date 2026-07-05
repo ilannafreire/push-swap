@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   disorder.c                                         :+:      :+:    :+:   */
+/*   metrics.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,10 +12,10 @@
 
 #include "push_swap.h"
 
-double	compute_disorder(t_stack *a)
+double	measure_entropy(t_node *a)
 {
-	t_stack	*i;
-	t_stack	*j;
+	t_node	*i;
+	t_node	*j;
 	long	mistakes;
 	long	total_pairs;
 

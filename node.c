@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack.c                                            :+:      :+:    :+:   */
+/*   node.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,14 +12,14 @@
 
 #include "push_swap.h"
 
-t_stack	*stack_new(int value)
+t_node	*node_new(int value)
 {
-	t_stack	*node;
+	t_node	*node;
 
-	node = malloc(sizeof(t_stack));
+	node = malloc(sizeof(t_node));
 	if (!node)
 	{
-		put_str(2, "Error\n");
+		write_str(2, "Error\n");
 		exit(1);
 	}
 	node->value = value;
@@ -28,9 +28,9 @@ t_stack	*stack_new(int value)
 	return (node);
 }
 
-void	stack_free(t_stack **stack)
+void	list_free(t_node **stack)
 {
-	t_stack	*tmp;
+	t_node	*tmp;
 
 	while (*stack)
 	{
@@ -40,7 +40,7 @@ void	stack_free(t_stack **stack)
 	}
 }
 
-int	stack_size(t_stack *stack)
+int	list_size(t_node *stack)
 {
 	int	count;
 
@@ -53,7 +53,7 @@ int	stack_size(t_stack *stack)
 	return (count);
 }
 
-int	stack_is_sorted(t_stack *stack)
+int	list_is_sorted(t_node *stack)
 {
 	while (stack && stack->next)
 	{

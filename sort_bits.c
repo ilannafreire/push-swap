@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_radix.c                                       :+:      :+:    :+:   */
+/*   sort_bits.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,10 +12,10 @@
 
 #include "push_swap.h"
 
-static void	assign_ranks(t_stack *a)
+static void	rank_nodes(t_node *a)
 {
-	t_stack	*i;
-	t_stack	*j;
+	t_node	*i;
+	t_node	*j;
 	int		rank;
 
 	i = a;
@@ -34,7 +34,7 @@ static void	assign_ranks(t_stack *a)
 	}
 }
 
-static int	bits_needed(int n)
+static int	log2_ceil(int n)
 {
 	int	bits;
 	int	limit;
@@ -49,13 +49,13 @@ static int	bits_needed(int n)
 	return (bits);
 }
 
-static void	radix_pass(t_data *data, int bit)
+static void	bit_pass(t_ctx *data, int bit)
 {
 	int	count;
 	int	zeros;
 	int	i;
 
-	count = stack_size(data->a);
+	count = list_size(data->a);
 	zeros = 0;
 	i = 0;
 	while (i < count)
@@ -77,20 +77,20 @@ static void	radix_pass(t_data *data, int bit)
 	}
 }
 
-void	sort_radix(t_data *data)
+void	sort_bitwise(t_ctx *data)
 {
 	int	bits;
 	int	bit;
 
-	data->used_strategy = STRAT_COMPLEX;
+	data->used_algo = ALGO_BITWISE;
 	if (!data->a || !data->a->next)
 		return ;
-	assign_ranks(data->a);
-	bits = bits_needed(stack_size(data->a));
+	rank_nodes(data->a);
+	bits = log2_ceil(list_size(data->a));
 	bit = 0;
 	while (bit < bits)
 	{
-		radix_pass(data, bit);
+		bit_pass(data, bit);
 		bit++;
 	}
 }

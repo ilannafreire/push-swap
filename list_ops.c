@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack_utils.c                                      :+:      :+:    :+:   */
+/*   list_ops.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,10 +12,10 @@
 
 #include "push_swap.h"
 
-void	generic_swap(t_stack **stack)
+void	swap_top(t_node **stack)
 {
-	t_stack	*first;
-	t_stack	*second;
+	t_node	*first;
+	t_node	*second;
 
 	if (!*stack || !(*stack)->next)
 		return ;
@@ -26,10 +26,10 @@ void	generic_swap(t_stack **stack)
 	*stack = second;
 }
 
-void	generic_rotate(t_stack **stack)
+void	shift_fwd(t_node **stack)
 {
-	t_stack	*first;
-	t_stack	*last;
+	t_node	*first;
+	t_node	*last;
 
 	if (!*stack || !(*stack)->next)
 		return ;
@@ -42,10 +42,10 @@ void	generic_rotate(t_stack **stack)
 	first->next = NULL;
 }
 
-void	generic_reverse_rotate(t_stack **stack)
+void	shift_back(t_node **stack)
 {
-	t_stack	*second_last;
-	t_stack	*last;
+	t_node	*second_last;
+	t_node	*last;
 
 	if (!*stack || !(*stack)->next)
 		return ;
@@ -58,9 +58,9 @@ void	generic_reverse_rotate(t_stack **stack)
 	*stack = last;
 }
 
-void	generic_push(t_stack **dst, t_stack **src)
+void	transfer_top(t_node **dst, t_node **src)
 {
-	t_stack	*node;
+	t_node	*node;
 
 	if (!*src)
 		return ;
