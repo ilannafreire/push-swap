@@ -6,33 +6,32 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 02:04:19 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/05 02:04:23 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/05 02:39:54 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	get_rank(t_data *data, int value)
+static void	assign_ranks(t_stack *a)
 {
-	t_stack	*cur;
+	t_stack	*i;
+	t_stack	*j;
 	int		rank;
 
-	rank = 0;
-	cur = data->a;
-	while (cur)
+	i = a;
+	while (i)
 	{
-		if (cur->value < value)
-			rank++;
-		cur = cur->next;
+		rank = 0;
+		j = a;
+		while (j)
+		{
+			if (j->value < i->value)
+				rank++;
+			j = j->next;
+		}
+		i->rank = rank;
+		i = i->next;
 	}
-	cur = data->b;
-	while (cur)
-	{
-		if (cur->value < value)
-			rank++;
-		cur = cur->next;
-	}
-	return (rank);
 }
 
 static int	bits_needed(int n)
@@ -61,7 +60,7 @@ static void	radix_pass(t_data *data, int bit)
 	i = 0;
 	while (i < count)
 	{
-		if (!((get_rank(data, data->a->value) >> bit) & 1))
+		if (!((data->a->rank >> bit) & 1))
 		{
 			op_pb(data);
 			zeros++;
@@ -86,6 +85,7 @@ void	sort_radix(t_data *data)
 	data->used_strategy = STRAT_COMPLEX;
 	if (!data->a || !data->a->next)
 		return ;
+	assign_ranks(data->a);
 	bits = bits_needed(stack_size(data->a));
 	bit = 0;
 	while (bit < bits)

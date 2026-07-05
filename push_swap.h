@@ -6,7 +6,7 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 02:03:31 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/05 02:03:35 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/05 02:32:54 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 typedef struct s_stack
 {
 	int				value;
+	int				rank;
 	struct s_stack	*next;
 }	t_stack;
 

@@ -6,7 +6,7 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 02:04:08 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/05 02:04:10 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/05 02:32:54 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,37 +35,49 @@ static void	distribute(t_data *data, int *cfg)
 	}
 }
 
-static void	local_sort_chunk(t_data *data, int low, int high, int size)
+static int	find_in_range(t_stack *a, int low, int high)
 {
 	t_stack	*cur;
 	int		best_pos;
 	int		best_val;
 	int		pos;
 
+	cur = a;
+	best_pos = -1;
+	best_val = 0;
+	pos = 0;
+	while (cur)
+	{
+		if (cur->value >= low && cur->value <= high)
+		{
+			if (best_pos == -1 || cur->value < best_val)
+			{
+				best_val = cur->value;
+				best_pos = pos;
+			}
+		}
+		cur = cur->next;
+		pos++;
+	}
+	return (best_pos);
+}
+
+static void	local_sort_chunk(t_data *data, int low, int high, int size)
+{
+	int	best_pos;
+	int	sz;
+
 	while (size-- > 0)
 	{
-		cur = data->a;
-		best_pos = -1;
-		best_val = 0;
-		pos = 0;
-		while (cur)
-		{
-			if (cur->value >= low && cur->value <= high)
-				if (best_pos == -1 || cur->value < best_val)
-				{
-					best_val = cur->value;
-					best_pos = pos;
-				}
-			cur = cur->next;
-			pos++;
-		}
-		if (best_pos <= stack_size(data->a) - best_pos)
+		best_pos = find_in_range(data->a, low, high);
+		sz = stack_size(data->a);
+		if (best_pos <= sz - best_pos)
 			while (best_pos-- > 0)
 				op_ra(data);
 		else
 		{
-			pos = stack_size(data->a) - best_pos;
-			while (pos-- > 0)
+			sz = sz - best_pos;
+			while (sz-- > 0)
 				op_rra(data);
 		}
 		op_pb(data);
@@ -99,7 +111,6 @@ void	sort_chunks(t_data *data)
 	int	max_val;
 	int	cfg[3];
 	int	*sizes;
-	int	i;
 
 	data->used_strategy = STRAT_MEDIUM;
 	if (!data->a || !data->a->next)
@@ -108,15 +119,12 @@ void	sort_chunks(t_data *data)
 	cfg[2] = sqrt_ceil(stack_size(data->a));
 	cfg[0] = min_val;
 	cfg[1] = (max_val - min_val) / cfg[2] + 1;
-	sizes = malloc(sizeof(int) * cfg[2]);
+	sizes = (int *)calloc(cfg[2], sizeof(int));
 	if (!sizes)
 	{
 		put_str(2, "Error\n");
-		exit(1);
+		return ;
 	}
-	i = -1;
-	while (++i < cfg[2])
-		sizes[i] = 0;
 	count_sizes(data->a, sizes, cfg);
 	distribute(data, cfg);
 	reassemble(data, sizes, cfg);

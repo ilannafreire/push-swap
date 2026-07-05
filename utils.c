@@ -6,7 +6,7 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 02:05:17 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/05 02:05:19 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/05 02:32:54 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,27 @@ void	put_nbr(int fd, int n)
 
 int	my_atoi_strict(const char *s, int *out)
 {
-	int		i;
 	int		sign;
 	long	res;
 
-	i = 0;
 	sign = 1;
-	res = 0;
-	if (s[i] == '+' || s[i] == '-')
+	if (*s == '+' || *s == '-')
 	{
-		if (s[i] == '-')
+		if (*s == '-')
 			sign = -1;
-		i++;
+		s++;
 	}
-	if (!s[i])
+	if (!*s)
 		return (0);
-	while (s[i])
+	res = 0;
+	while (*s)
 	{
-		if (!my_isdigit(s[i]))
+		if (!my_isdigit(*s))
 			return (0);
-		res = res * 10 + (s[i] - '0');
+		res = res * 10 + (*s - '0');
 		if (res * sign > INT_MAX || res * sign < INT_MIN)
 			return (0);
-		i++;
+		s++;
 	}
 	*out = (int)(res * sign);
 	return (1);

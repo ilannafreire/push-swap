@@ -6,10 +6,9 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 02:05:05 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/05 02:05:05 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/05 02:32:56 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "push_swap.h"
 
@@ -24,6 +23,7 @@ t_stack	*stack_new(int value)
 		exit(1);
 	}
 	node->value = value;
+	node->rank = 0;
 	node->next = NULL;
 	return (node);
 }

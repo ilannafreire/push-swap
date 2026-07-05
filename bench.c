@@ -6,10 +6,9 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 02:01:14 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/05 02:01:27 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/05 02:32:54 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "push_swap.h"
 
@@ -38,6 +37,23 @@ static void	print_strategy(t_data *data)
 		put_str(2, "Complex / O(n log n)\n");
 }
 
+static void	print_ops_b(t_data *data)
+{
+	put_str(2, "\n[bench] ra: ");
+	put_nbr(2, data->bench.ra);
+	put_str(2, " rb: ");
+	put_nbr(2, data->bench.rb);
+	put_str(2, " rr: ");
+	put_nbr(2, data->bench.rr);
+	put_str(2, " rra: ");
+	put_nbr(2, data->bench.rra);
+	put_str(2, " rrb: ");
+	put_nbr(2, data->bench.rrb);
+	put_str(2, " rrr: ");
+	put_nbr(2, data->bench.rrr);
+	put_str(2, "\n");
+}
+
 static void	print_counts(t_data *data)
 {
 	int	total;
@@ -58,19 +74,7 @@ static void	print_counts(t_data *data)
 	put_nbr(2, data->bench.pa);
 	put_str(2, " pb: ");
 	put_nbr(2, data->bench.pb);
-	put_str(2, "\n[bench] ra: ");
-	put_nbr(2, data->bench.ra);
-	put_str(2, " rb: ");
-	put_nbr(2, data->bench.rb);
-	put_str(2, " rr: ");
-	put_nbr(2, data->bench.rr);
-	put_str(2, " rra: ");
-	put_nbr(2, data->bench.rra);
-	put_str(2, " rrb: ");
-	put_nbr(2, data->bench.rrb);
-	put_str(2, " rrr: ");
-	put_nbr(2, data->bench.rrr);
-	put_str(2, "\n");
+	print_ops_b(data);
 }
 
 void	print_bench(t_data *data)
