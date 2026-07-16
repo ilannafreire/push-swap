@@ -3,26 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   sort_chunks_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
+/*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/05 14:00:00 by ifreire                     #+#    #+#   */
-/*   Updated: 2026/07/05 14:00:00 by ifreire              ###   ########.fr   */
+/*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
+/*   Updated: 2026/07/14 23:43:11 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	stack_min_max(t_stack *a, int *min_val, int *max_val)
+void	assign_ranks(t_stack *a)
 {
-	*min_val = a->value;
-	*max_val = a->value;
-	while (a)
+	t_stack	*i;
+	t_stack	*j;
+	int		rank;
+
+	i = a;
+	while (i)
 	{
-		if (a->value < *min_val)
-			*min_val = a->value;
-		if (a->value > *max_val)
-			*max_val = a->value;
-		a = a->next;
+		rank = 0;
+		j = a;
+		while (j)
+		{
+			if (j->value < i->value)
+				rank++;
+			j = j->next;
+		}
+		i->rank = rank;
+		i = i->next;
 	}
 }
 
@@ -36,21 +44,45 @@ int	sqrt_ceil(int n)
 	return (r);
 }
 
-int	chunk_index(int value, t_chunk_cfg *cfg)
+int	find_max_rank_b(t_stack *b, int lo, int hi)
 {
-	int	idx;
+	t_stack	*cur;
+	int		best_pos;
+	int		best_rank;
+	int		pos;
 
-	idx = (value - cfg->min_val) / cfg->width;
-	if (idx >= cfg->nb)
-		idx = cfg->nb - 1;
-	return (idx);
+	cur = b;
+	best_pos = -1;
+	best_rank = -1;
+	pos = 0;
+	while (cur)
+	{
+		if (cur->rank >= lo && cur->rank <= hi && cur->rank > best_rank)
+		{
+			best_rank = cur->rank;
+			best_pos = pos;
+		}
+		cur = cur->next;
+		pos++;
+	}
+	return (best_pos);
 }
 
-void	count_sizes(t_stack *a, int *sizes, t_chunk_cfg *cfg)
+void	bring_b_top(t_data *data, int pos)
 {
-	while (a)
+	int	size;
+	int	dist;
+
+	size = stack_size(data->b);
+	if (pos <= size - pos)
 	{
-		sizes[chunk_index(a->value, cfg)]++;
-		a = a->next;
+		while (pos-- > 0)
+			op_rb(data);
+	}
+	else
+	{
+		dist = size - pos;
+		while (dist-- > 0)
+			op_rrb(data);
 	}
 }

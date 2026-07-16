@@ -3,36 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sort_radix.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
+/*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/05 14:00:00 by ifreire                     #+#    #+#   */
-/*   Updated: 2026/07/05 14:00:00 by ifreire              ###   ########.fr   */
+/*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
+/*   Updated: 2026/07/14 23:43:11 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-static void	assign_ranks(t_stack *a)
-{
-	t_stack	*i;
-	t_stack	*j;
-	int		rank;
-
-	i = a;
-	while (i)
-	{
-		rank = 0;
-		j = a;
-		while (j)
-		{
-			if (j->value < i->value)
-				rank++;
-			j = j->next;
-		}
-		i->rank = rank;
-		i = i->next;
-	}
-}
 
 static int	bits_needed(int n)
 {

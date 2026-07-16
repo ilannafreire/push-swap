@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bench.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
+/*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/05 14:00:00 by ifreire                     #+#    #+#   */
-/*   Updated: 2026/07/05 14:00:00 by ifreire              ###   ########.fr   */
+/*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
+/*   Updated: 2026/07/14 23:43:24 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ static void	print_disorder(t_data *data)
 static void	print_strategy(t_data *data)
 {
 	put_str(2, "[bench] strategy: ");
-	if (data->used_strategy == STRAT_SIMPLE)
+	if (data->strategy == STRAT_ADAPTIVE)
+		put_str(2, "adaptive\n");
+	else if (data->used_strategy == STRAT_SIMPLE)
 		put_str(2, "Simple / O(n^2)\n");
 	else if (data->used_strategy == STRAT_MEDIUM)
 		put_str(2, "Medium / O(n*sqrt(n))\n");

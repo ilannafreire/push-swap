@@ -6,7 +6,7 @@
 #    By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#              #
-#    Updated: 2026/07/05 14:00:00 by ifreire          ###   ########.fr        #
+#    Updated: 2026/07/14 23:43:32 by ifreire          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS = main.c \
        ops_double.c \
        disorder.c \
        sort_selection.c \
+       sort_small.c \
        sort_chunks_utils.c \
        sort_chunks.c \
        sort_radix.c \

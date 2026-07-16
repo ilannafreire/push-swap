@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
+/*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/05 14:00:00 by ifreire                     #+#    #+#   */
-/*   Updated: 2026/07/05 14:00:00 by ifreire              ###   ########.fr   */
+/*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
+/*   Updated: 2026/07/14 23:43:26 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,49 @@ static int	add_number(t_data *data, int value)
 	return (1);
 }
 
+static int	process_arg(t_data *data, const char *arg)
+{
+	char	buf[20];
+	int		i;
+	int		val;
+	int		found;
+
+	found = 0;
+	while (*arg)
+	{
+		while (*arg == ' ')
+			arg++;
+		if (!*arg)
+			break ;
+		found++;
+		i = 0;
+		while (*arg && *arg != ' ')
+		{
+			if (i >= 19)
+				return (0);
+			buf[i++] = *arg++;
+		}
+		buf[i] = '\0';
+		if (!is_flag(buf, data))
+		{
+			if (!my_atoi_strict(buf, &val) || !add_number(data, val))
+				return (0);
+		}
+	}
+	if (!found)
+		return (0);
+	return (1);
+}
+
 static int	build_stack(t_data *data, int argc, char **argv, int start)
 {
 	int	i;
-	int	value;
 
 	i = start;
 	while (i < argc)
 	{
-		if (!is_flag(argv[i], data))
-		{
-			if (!my_atoi_strict(argv[i], &value))
-				return (0);
-			if (!add_number(data, value))
-				return (0);
-		}
+		if (!process_arg(data, argv[i]))
+			return (0);
 		i++;
 	}
 	return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
+/*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/05 14:00:00 by ifreire                     #+#    #+#   */
-/*   Updated: 2026/07/05 14:00:00 by ifreire              ###   ########.fr   */
+/*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
+/*   Updated: 2026/07/14 23:43:11 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,6 @@ typedef struct s_data
 	int			bench_mode;
 }	t_data;
 
-typedef struct s_chunk_cfg
-{
-	int	min_val;
-	int	width;
-	int	nb;
-}	t_chunk_cfg;
-
 int		my_isdigit(char c);
 int		my_atoi_strict(const char *s, int *out);
 
@@ -101,11 +94,12 @@ void	op_rrr(t_data *data);
 double	compute_disorder(t_stack *a);
 
 void	sort_selection(t_data *data);
+void	sort_small(t_data *data);
 
-void	stack_min_max(t_stack *a, int *min_val, int *max_val);
+void	assign_ranks(t_stack *a);
 int		sqrt_ceil(int n);
-int		chunk_index(int value, t_chunk_cfg *cfg);
-void	count_sizes(t_stack *a, int *sizes, t_chunk_cfg *cfg);
+int		find_max_rank_b(t_stack *b, int lo, int hi);
+void	bring_b_top(t_data *data, int pos);
 
 void	sort_chunks(t_data *data);
 
