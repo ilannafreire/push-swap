@@ -6,7 +6,7 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/14 23:43:11 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/18 17:17:26 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ static void	sort_3(t_data *data)
 	}
 }
 
-static void	push_min_to_b(t_data *data)
+static int	find_min_pos(t_stack *head)
 {
 	t_stack	*cur;
 	int		min_val;
 	int		idx;
 	int		min_idx;
 
-	cur = data->a;
+	cur = head;
 	min_val = cur->value;
 	idx = 0;
 	min_idx = 0;
@@ -66,13 +66,22 @@ static void	push_min_to_b(t_data *data)
 		cur = cur->next;
 		idx++;
 	}
-	idx = stack_size(data->a);
-	if (min_idx <= idx - min_idx)
+	return (min_idx);
+}
+
+static void	push_min_to_b(t_data *data)
+{
+	int		sz;
+	int		min_idx;
+
+	min_idx = find_min_pos(data->a);
+	sz = stack_size(data->a);
+	if (min_idx <= sz - min_idx)
 		while (min_idx-- > 0)
 			op_ra(data);
 	else
 	{
-		min_idx = idx - min_idx;
+		min_idx = sz - min_idx;
 		while (min_idx-- > 0)
 			op_rra(data);
 	}

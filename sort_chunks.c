@@ -6,7 +6,7 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/14 23:43:11 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/18 17:17:47 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ static void	reassemble(t_data *data, int nb, int chunk_size, int n)
 	while (chunk_id >= 0)
 	{
 		lo = chunk_id * chunk_size;
-		hi = (chunk_id < nb - 1) ? lo + chunk_size - 1 : n - 1;
+		if (chunk_id < nb - 1)
+			hi = lo + chunk_size - 1;
+		else
+			hi = n - 1;
 		cnt = hi - lo + 1;
 		while (cnt-- > 0)
 		{

@@ -6,21 +6,11 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/14 23:43:26 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/18 17:17:26 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-static int	str_eq(const char *a, const char *b)
-{
-	int	i;
-
-	i = 0;
-	while (a[i] && b[i] && a[i] == b[i])
-		i++;
-	return (a[i] == '\0' && b[i] == '\0');
-}
 
 static int	is_flag(const char *arg, t_data *data)
 {
@@ -67,26 +57,19 @@ static int	add_number(t_data *data, int value)
 static int	process_arg(t_data *data, const char *arg)
 {
 	char	buf[20];
-	int		i;
 	int		val;
 	int		found;
+	int		res;
 
 	found = 0;
 	while (*arg)
 	{
-		while (*arg == ' ')
-			arg++;
-		if (!*arg)
+		res = read_next_token(&arg, buf, 20);
+		if (res == 0)
 			break ;
+		if (res < 0)
+			return (0);
 		found++;
-		i = 0;
-		while (*arg && *arg != ' ')
-		{
-			if (i >= 19)
-				return (0);
-			buf[i++] = *arg++;
-		}
-		buf[i] = '\0';
 		if (!is_flag(buf, data))
 		{
 			if (!my_atoi_strict(buf, &val) || !add_number(data, val))
