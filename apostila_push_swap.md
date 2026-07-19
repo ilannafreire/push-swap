@@ -488,6 +488,30 @@ Esse desenho evita dependência circular: `stack/` não sabe que `operations/` e
 └─────────┘└────────────┘
 ```
 
+### Como isso mapeia para o nosso projeto real
+
+*[Nota adicionada após a implementação: a estrutura acima é a organização didática/genérica. No nosso projeto de fato, por causa do limite de "5 funções por arquivo" da Norma, optamos por uma pasta única (raiz do repositório) com vários arquivos pequenos e nomeados por responsabilidade, em vez de subpastas — o princípio de separação por módulo continua o mesmo, só a forma de expressar isso em diretórios que mudou.]*
+
+```
+push_swap/
+├── Makefile
+├── push_swap.h            (todos os protótipos e tipos)
+├── main.c                 (orquestra tudo)
+├── parse.c, parse_utils.c (parser + validação/tokenização)
+├── stack.c, stack_utils.c (nó da pilha + operações genéricas)
+├── ops_a.c, ops_b.c, ops_double.c (as 11 operações da spec)
+├── disorder.c             (métrica de desordem)
+├── sort_small.c           (casos n ≤ 5)
+├── sort_selection.c       (estratégia O(n²) — "--simple")
+├── sort_chunks_utils.c, sort_chunks.c (estratégia O(n·√n) — "--medium")
+├── sort_radix.c           (estratégia O(n log n) — "--complex")
+├── sort_adaptive.c        (escolhe entre as três acima)
+├── bench.c                (saída do modo --bench)
+└── io_utils.c             (escrita em fd, sem usar printf)
+```
+
+A relação de dependência entre esses arquivos é a mesma discutida acima (`stack`/`ops` não conhecem `sort_*`; `sort_*` conhece `ops` e `stack`; `main.c` é quem orquestra tudo) — só não está expressa em pastas separadas.
+
 ### Resumo do capítulo
 
 Organizar por responsabilidade (parser, stack, operations, sorting, utils) mantém cada arquivo pequeno, testável e alinhado com o limite de funções por arquivo da Norma — e deixa claro, só pela estrutura de pastas, o fluxo de dependências do projeto.
@@ -615,12 +639,13 @@ O fluxo tem uma ordem rígida: validar antes de tudo, checar se já está ordena
 |---|---|---|
 | Letras/símbolos misturados | `"12a"`, `"1.5"` | não é um inteiro válido |
 | Apenas sinal, sem dígitos | `"-"`, `"+"` | não representa número nenhum |
-| Espaços dentro do argumento | `"1 2"` como um único argv | ambíguo — é um ou dois números? |
 | Overflow (maior que `INT_MAX`) | `"99999999999"` | não cabe em `int` |
 | Underflow (menor que `INT_MIN`) | `"-99999999999"` | idem |
 | Duplicados | `"3", "3"` | a spec proíbe valores repetidos |
 | Entrada vazia | `argc == 1` | nada a ordenar, não é erro, só não imprime nada |
 | Múltiplos sinais | `"--3"`, `"+-3"` | formato inválido |
+
+**Nota sobre espaços dentro de um argumento — decisão deste projeto:** diferente do que uma primeira leitura da spec sugere, o nosso parser **aceita** múltiplos números dentro de um único `argv`, separados por espaço (ex.: `./push_swap "1 2 3"` funciona igual a `./push_swap 1 2 3`). Isso é feito por uma função tokenizadora (`read_next_token`, em `parse_utils.c`) que percorre a string caractere a caractere, ignora espaços entre números e extrai um "token" por vez, validando cada um individualmente com `my_atoi_strict`. Ou seja: "espaço" não é mais um caractere inválido por si só — ele é um **separador de token**, e cada token extraído passa pela mesma validação de sempre (dígitos, sinal, overflow). Um token vazio (só espaços, ou nenhum número entre eles) ainda é tratado como erro.
 
 ### Por que não basta usar `atoi`
 
@@ -647,13 +672,15 @@ A lição aqui: **sempre valide em um tipo com faixa maior antes de reduzir para
 ### Exemplos válidos vs. inválidos
 
 ```
-Válidos:            Inválidos:
-"42"                 "42a"
-"-17"                "- 17"      (espaço depois do sinal)
-"0"                  "007"       (aceitável ou não? decida e documente
-                                   sua regra — a spec não exige rejeitar
-                                   zeros à esquerda, mas seja consistente)
-"2147483647"         "2147483648" (estoura INT_MAX)
+Válidos:              Inválidos:
+"42"                   "42a"
+"-17"                  "- 17"      (espaço separa "-" e "17" em dois
+                                     tokens; "-" sozinho é inválido)
+"0"                    "007"       (aceitável ou não? decida e documente
+                                     sua regra — a spec não exige rejeitar
+                                     zeros à esquerda, mas seja consistente)
+"2147483647"           "2147483648" (estoura INT_MAX)
+"1 2 3" (um só argv)   "1  " (token vazio ao final, tratado como erro)
 ```
 
 ### Duplicados — quando checar
@@ -732,6 +759,20 @@ Esse padrão ("tire o(s) menor(es) para `b`, resolva um caso menor conhecido, de
 | Radix / Turk | ordenar por bits do rank | entradas grandes, qualquer desordem | O(n log n) |
 | Chunk sort | dividir por faixa de valor | entradas grandes, meio-termo | O(n·√n) |
 | LIS | preservar o que já está ordenado | entradas quase ordenadas | varia (ótimo em bons casos) |
+
+### O que este projeto realmente implementa
+
+*[Nota adicionada após a implementação]* Das opções discutidas acima, o projeto implementa três, mais um "caso pequeno" dedicado — **LIS não foi implementado** (ficou como alternativa conhecida, não usada):
+
+| Arquivo | Estratégia da tabela acima | Ideia real implementada |
+|---|---|---|
+| `sort_small.c` | técnica de redução (2-5 elementos) | `sort_2`/`sort_3` por comparação direta; 4 e 5 tiram o(s) menor(es) para `b`, resolvem 3, devolvem |
+| `sort_selection.c` | "ingênuo" (achar o menor, mover, repetir) | é literalmente essa estratégia — usada quando `--simple` é pedido (para `n` até 100) |
+| `sort_chunks.c` + `sort_chunks_utils.c` | Chunk sort | em vez de dividir por **faixa de valor**, divide pelo **rank** (posição que cada elemento ocuparia já ordenado) em `⌈√n⌉` grupos de tamanho igual — isso evita grupos desbalanceados que uma divisão por valor bruto poderia gerar em entradas com distribuição irregular |
+| `sort_radix.c` | Radix / Turk | radix sort clássico sobre o rank, bit a bit, do menos para o mais significativo |
+| `sort_adaptive.c` | — | dispatcher: mede `disorder` e escolhe entre as três acima pelos limiares 0.2 / 0.5 |
+
+Repare que tanto `sort_chunks.c` quanto `sort_radix.c` dependem de um **rank pré-calculado** (campo `rank` dentro de `t_stack`, preenchido por `assign_ranks()`) em vez de comparar valores brutos — isso simplifica as contas de "em qual grupo/bit esse elemento cai" para um número pequeno (`0` a `n-1`), independente da faixa real dos valores de entrada (que pode incluir negativos, números bem espaçados, etc.).
 
 ### Resumo do capítulo
 
@@ -899,6 +940,25 @@ Esta é a lista de funções que **costumam** existir em implementações de pus
 - **Pré-condição:** nenhuma (deve lidar com pilha já vazia).
 - **Pós-condição:** ponteiro da pilha aponta para `NULL`, toda memória devolvida.
 
+### Correspondência com os nomes reais do nosso código
+
+*[Nota adicionada após a implementação]* Os nomes acima são genéricos, para ensinar o conceito. No nosso projeto, alguns ganharam nomes diferentes (mais alinhados ao vocabulário da spec) ou foram fundidos em uma função só. Tabela de correspondência:
+
+| Nome genérico (neste capítulo) | Nome real no projeto | Onde |
+|---|---|---|
+| `init_stack()` | inline dentro de `parse_args()` (zera `data->a`, `data->b`, etc.) | `parse.c` |
+| `create_node()` | `stack_new()` | `stack.c` |
+| `push()` | `generic_push()` | `stack_utils.c` |
+| `rotate()` / `reverse_rotate()` | `generic_rotate()` / `generic_reverse_rotate()` | `stack_utils.c` |
+| `swap()` | `generic_swap()` | `stack_utils.c` |
+| `sort_three()` / `sort_five()` | uma função só, `sort_small()`, que cobre `n` de 2 a 5 (usa as estáticas `sort_2`, `sort_3`, `find_min_pos`, `push_min_to_b` internamente) | `sort_small.c` |
+| `radix_sort()` | `sort_radix()` (chama `assign_ranks()` e depois `radix_pass()` por bit) | `sort_radix.c` |
+| `parse_args()` | `parse_args()` (nome igual) | `parse.c` |
+| `check_duplicates()` | não existe separada — a checagem está embutida em `add_number()`, que já percorre a lista para inserir | `parse.c` |
+| `free_stack()` | `stack_free()` | `stack.c` |
+
+Um detalhe extra que não estava na lista genérica: o parser real também tem `process_arg()` e `read_next_token()` (`parse.c`/`parse_utils.c`), responsáveis por quebrar um único `argv` em vários números separados por espaço antes de validar cada um — conceito que não existia quando este capítulo foi escrito originalmente (ver Capítulo 8).
+
 ### Resumo do capítulo
 
 Cada função deve ter uma responsabilidade única e clara — perceba como as funções "genéricas" (`push`, `rotate`, `swap`) são reaproveitadas tanto para `a` quanto para `b`, e como as funções "de operação" (`op_pa`, `op_ra`...) são finas camadas em cima delas, responsáveis só por imprimir o nome.
@@ -939,6 +999,10 @@ A estratégia "ache o menor elemento, traga ao topo, empurre para `b`, repita" c
 ### Por que radix é O(n log n)
 
 Cada "passada" (uma por bit do rank) processa todos os `n` elementos uma vez: custo `O(n)` por passada. O número de bits necessários para representar ranks de `0` a `n-1` é `⌈log₂ n⌉`. Total: `O(n) × O(log n) = O(n log n)`.
+
+### Como isso aparece no nosso código
+
+*[Nota adicionada após a implementação]* A estratégia "ingênuo" da tabela não é só um exemplo didático aqui — é exatamente o que `sort_selection.c` implementa, e ela roda de verdade quando `--simple` é escolhido (para `n` até 100; acima disso o `main.c` troca por `sort_radix` para não gerar uma quantidade absurda de operações — vale conferir esse detalhe com atenção na arguição, já que a spec pede que cada flag force sua própria classe de complexidade "independente do tamanho da entrada"). Já `sort_chunks.c` mede o custo em cima do **rank** pré-calculado, não do valor bruto — isso ajuda a manter os `⌈√n⌉` grupos com tamanhos parecidos entre si, o que é a premissa por trás da conta `O(n·√n)`.
 
 ### Resumo do capítulo
 
