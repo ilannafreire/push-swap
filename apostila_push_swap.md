@@ -1,7 +1,5 @@
 # Apostila Push Swap — Material de Estudo
 
-*Escrito no papel de um mentor sênior de Engenharia de Software da 42. Este material ensina os conceitos, algoritmos e decisões de projeto necessários para implementar o push_swap do zero — ele não entrega a solução pronta.*
-
 ---
 
 ## Sumário

@@ -351,18 +351,6 @@ Explique:
 * como evitá-los
 * boas práticas
 
-## Capítulo 16 — Roadmap de estudo
-
-Monte um cronograma de aprendizado para dominar o projeto.
-
-Exemplo:
-
-Dia 1
-...
-
-Dia 2
-...
-
 Até finalizar completamente.
 
 # Regras importantes
