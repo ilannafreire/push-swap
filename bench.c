@@ -6,7 +6,7 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/18 16:02:35 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/20 21:33:47 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ static void	print_strategy(t_data *data)
 {
 	put_str(2, "[bench] strategy: ");
 	if (data->strategy == STRAT_ADAPTIVE)
-		put_str(2, "adaptive\n");
+		put_str(2, "adaptive (O(n^2)/O(n sqrt n)/O(n log n))\n");
 	else if (data->strategy == STRAT_SIMPLE)
-		put_str(2, "simple\n");
+		put_str(2, "simple (O(n^2))\n");
 	else if (data->strategy == STRAT_MEDIUM)
-		put_str(2, "medium\n");
+		put_str(2, "medium (O(n sqrt n))\n");
 	else
-		put_str(2, "complex\n");
+		put_str(2, "complex (O(n log n))\n");
 }
 
 static void	print_rotate_counts(t_data *data)

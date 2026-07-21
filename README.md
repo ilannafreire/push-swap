@@ -10,25 +10,8 @@ fewest operations possible.
 
 | Login | Contributions |
 |---|---|
-| ifreire | Stack data structure, operations (sa/sb/ss/pa/pb/ra/rb/rr/rra/rrb/rrr), argument parsing, disorder metric, radix sort (complex), adaptive strategy, bench mode, Makefile |
-| inaomi-i | Selection sort (simple), chunk-based sort (medium), sort utilities, README |
-
-## Status
-
- Work in progress. 
-
-| Part | Status |
-|---|---|
-| Stack data structure + operations (`sa`, `sb`, `ss`, `pa`, `pb`, `ra`, `rb`, `rr`, `rra`, `rrb`, `rrr`) | ☐ |
-| Argument parsing & error handling | ☐ |
-| Disorder metric | ☐ |
-| Simple sort — O(n²) | ☐ |
-| Medium sort — O(n·√n) | ☐ |
-| Complex sort — O(n log n) | ☐ |
-| Adaptive sort | ☐ |
-| `--bench` mode | ☐ |
-| Bonus: `checker` | ☐ |
-| README fully documented | ☐ |
+| ifreire | Stack data structure, all 11 operations (`sa`, `sb`, `ss`, `pa`, `pb`, `ra`, `rb`, `rr`, `rra`, `rrb`, `rrr`), argument parsing, disorder metric, radix sort (complex), Makefile |
+| inaomi-i | Selection sort (simple), chunk-based sort (medium), sort utilities, adaptive strategy, bench mode, README |
 
 ## Description
 
@@ -136,3 +119,18 @@ in each node).
   effective work within each chunk.
 - Above 0.5 the input is close to worst-case random; radix sort's
   data-independent O(n log n) cost is consistently optimal here.
+
+## Resources
+
+### References
+
+- Bhargava, Aditya Y. *Grokking Algorithms: An Illustrated Guide for Programmers and Other Curious People*, Manning Publications, 2016 — accessible introduction to sorting algorithms, Big O notation, and algorithmic thinking; directly relevant to the complexity analysis required by this project.
+- [push_swap — medium article by Jamie Dawson](https://medium.com/@jamierobertdawson/push-swap-the-least-amount-of-moves-with-two-stacks-d1e76a71789a) — practical walkthrough of stack-based sorting approaches.
+- [42 push_swap visualiser](https://github.com/o-reo/push_swap_visualizer) — tool used to visualise and debug operation sequences.
+
+### AI usage
+
+GitHub Copilot (Claude Sonnet 4.6) was used during this project for the following tasks:
+
+- **ifreire**: used AI to verify formulas (disorder metric, complexity bounds), to review edge cases in argument parsing (e.g. empty-string arguments, INT_MIN/INT_MAX bounds), and to help generate and structure the README.
+- **inaomi-i**: used AI to study the structure of the chunk-based sort and understand how the distribution loop works; the resulting code was then fully reviewed and rewritten manually.
