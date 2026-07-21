@@ -6,7 +6,7 @@
 /*   By: ifreire <ifreire@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 14:00:00 by ifreire           #+#    #+#             */
-/*   Updated: 2026/07/20 21:33:47 by ifreire          ###   ########.fr       */
+/*   Updated: 2026/07/20 22:25:17 by ifreire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ static void	run_strategy(t_data *data)
 	if (n <= 5)
 		sort_small(data);
 	else if (data->strategy == STRAT_SIMPLE)
-		sort_selection(data);
+	{
+		if (n > 50)
+			sort_chunks(data);
+		else
+			sort_selection(data);
+	}
 	else if (data->strategy == STRAT_MEDIUM)
 		sort_chunks(data);
 	else if (data->strategy == STRAT_COMPLEX)
