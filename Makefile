@@ -31,7 +31,7 @@ SRCS = main.c \
        sort_adaptive.c \
        bench.c \
        parse_utils.c \
-       io_utils.c
+       write_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

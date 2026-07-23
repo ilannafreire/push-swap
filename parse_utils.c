@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-int	my_isdigit(char c)
+int	is_digit(char c)
 {
 	return (c >= '0' && c <= '9');
 }
@@ -46,7 +46,7 @@ int	read_next_token(const char **arg, char *buf, int maxlen)
 	return (1);
 }
 
-int	my_atoi_strict(const char *s, int *out)
+int	atoi_strict(const char *s, int *out)
 {
 	int		sign;
 	long	res;
@@ -63,7 +63,7 @@ int	my_atoi_strict(const char *s, int *out)
 	res = 0;
 	while (*s)
 	{
-		if (!my_isdigit(*s))
+		if (!is_digit(*s))
 			return (0);
 		res = res * 10 + (*s - '0');
 		if (res * sign > INT_MAX || res * sign < INT_MIN)

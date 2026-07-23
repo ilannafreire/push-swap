@@ -72,7 +72,7 @@ static int	process_arg(t_data *data, const char *arg)
 		found++;
 		if (!is_flag(buf, data))
 		{
-			if (!my_atoi_strict(buf, &val) || !add_number(data, val))
+			if (!atoi_strict(buf, &val) || !add_number(data, val))
 				return (0);
 		}
 	}

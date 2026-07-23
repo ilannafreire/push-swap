@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   io_utils.c                                         :+:      :+:    :+:   */
+/*   write_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifreire <ifreire@student.42sp.org.br>           +#+  +:+       +#+   */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/05 14:00:00 by ifreire                     #+#    #+#   */
-/*   Updated: 2026/07/05 14:00:00 by ifreire              ###   ########.fr   */
+/*   Updated: 2026/07/23 12:00:00 by ifreire              ###   ########.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-size_t	my_strlen(const char *s)
+size_t	str_len(const char *s)
 {
 	size_t	i;
 
@@ -24,7 +24,7 @@ size_t	my_strlen(const char *s)
 
 void	put_str(int fd, const char *s)
 {
-	write(fd, s, my_strlen(s));
+	write(fd, s, str_len(s));
 }
 
 void	put_nbr(int fd, int n)

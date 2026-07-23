@@ -58,12 +58,12 @@ typedef struct s_data
 	int			bench_mode;
 }	t_data;
 
-int		my_isdigit(char c);
-int		my_atoi_strict(const char *s, int *out);
+int		is_digit(char c);
+int		atoi_strict(const char *s, int *out);
 int		str_eq(const char *a, const char *b);
 int		read_next_token(const char **arg, char *buf, int maxlen);
 
-size_t	my_strlen(const char *s);
+size_t	str_len(const char *s);
 void	put_str(int fd, const char *s);
 void	put_nbr(int fd, int n);
 
